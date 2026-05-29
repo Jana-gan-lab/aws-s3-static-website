@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Janagan's First AWS Project</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 750px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #00ffd5;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .aws-btn {
+      background: #00ffd5;
+      color: black;
+    }
+
+    .linkedin-btn {
+      background: #0A66C2;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    .special-message {
+      display: none;
+      margin-top: 25px;
+      font-size: 1.3rem;
+      color: #ffe066;
+      animation: glow 1s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #fff;
+      }
+
+      to {
+        text-shadow: 0 0 20px #ffe066;
+      }
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="fireworks"></canvas>
+
+  <div class="container">
+    <h1>Hi Janagan 👋</h1>
+
+    <p>
+      🎉 Congrats on your first AWS S3 Website Hosting Project!<br><br>
+      You officially launched your first cloud-hosted website.
+      This is the beginning of your Cloud journey 🚀
+    </p>
+
+    <a class="btn aws-btn" href="https://aws.amazon.com/" target="_blank">
+      Visit AWS
+    </a>
+
+    <a class="btn linkedin-btn" href="https://www.linkedin.com/in/janagans99" target="_blank" onclick="showMessage()">
+      Visit My LinkedIn
+    </a>
+
+    <div class="special-message" id="specialText">
+      🌟 Future Cloud Engineer in Progress 🌟
+    </div>
+
+    <footer>
+      Built with ❤️ by Janagan | AWS First Project
+    </footer>
+  </div>
+
+  <script>
+    function showMessage() {
+      document.getElementById('specialText').style.display = 'block';
+    }
+
+    // Fireworks Animation
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = Math.random() * 3 + 2;
+        this.speedX = (Math.random() - 0.5) * 8;
+        this.speedY = (Math.random() - 0.5) * 8;
+        this.alpha = 1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= 0.01;
+      }
+
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height / 2;
+
+      const colors = ['#ff4d6d', '#00ffd5', '#ffd60a', '#ffffff', '#7b2cbf'];
+
+      for (let i = 0; i < 80; i++) {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle, index) => {
+        particle.update();
+        particle.draw();
+
+        if (particle.alpha <= 0) {
+          particles.splice(index, 1);
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(createFirework, 700);
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+
+</html>
